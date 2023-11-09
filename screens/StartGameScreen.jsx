@@ -1,14 +1,31 @@
-import { TextInput, View, StyleSheet } from "react-native";
+import { TextInput, View, StyleSheet, Alert } from "react-native";
 import { useState } from "react";
 import PrimaryButton from "../components/PrimaryButton";
 
-function StartGameScreen() {
-  const [mobile, setMobile] = useState("");
+function StartGameScreen({ onConfirmNumber }) {
+  const [mobile, setMobile] = useState(""); //mobile is the inputted text
 
   const numberInputHandler = (inputText) => {
-    setMobile(inputText.replace(/[^0-9]/g, ""));
+    setMobile(inputText.replace(/[^1-9]/g, ""));
   };
 
+  function resetInputHandler() {
+    setMobile("");
+  }
+
+  function confirmInputHandler() {
+    const chosenNumber = parseInt(mobile);
+    console.log("Hmmm");
+    if (isNaN(chosenNumber)) {
+      Alert.alert("Invalid number!", "Stop trying to break the program!", [
+        { text: "Okay", style: "destructive", onPress: resetInputHandler },
+      ]);
+      return;
+    }
+
+    console.log(mobile);
+    onConfirmNumber(chosenNumber);
+  }
   return (
     <View style={styles.inputContainer}>
       <TextInput
@@ -22,10 +39,10 @@ function StartGameScreen() {
       />
       <View style={styles.buttonsContainer}>
         <View style={styles.buttonContainer}>
-          <PrimaryButton>Reset</PrimaryButton>
+          <PrimaryButton onPressed={resetInputHandler}>Reset</PrimaryButton>
         </View>
         <View style={styles.buttonContainer}>
-          <PrimaryButton>Confirm</PrimaryButton>
+          <PrimaryButton onPressed={confirmInputHandler}>Confirm</PrimaryButton>
         </View>
       </View>
     </View>
