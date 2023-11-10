@@ -1,6 +1,66 @@
-import { Text } from "react-native";
-function GameScreen() {
-  return <Text> Game screen! </Text>;
+import { View, Text, StyleSheet } from "react-native";
+import { useState } from "react";
+
+import PrimaryButton from "../components/ui/PrimaryButton.jsx";
+import Title from "../components/ui/Title.jsx";
+import NumberContainer from "../components/game/NumberContainer.jsx";
+
+function generateRandomBetween(min, max, exclude) {
+  const rndNum = Math.floor(Math.random() * (max - min)) + min;
+
+  if (rndNum === exclude) {
+    return generateRandomBetween(min, max, exclude);
+  } else {
+    return rndNum;
+  }
+}
+
+let minBoundary = 1;
+let maxBoundary = 100;
+
+function GameScreen({ userNumber }) {
+  const initialGuess = generateRandomBetween(
+    minBoundary,
+    maxBoundary,
+    userNumber
+  );
+  const [currentGuess, setCurrentGuess] = useState(initialGuess);
+
+  function nextGuessHandler(direction) {
+    if (direction === "lower") {
+      maxBoundary = currentGuess;
+      generateRandomBetween(minBoundary, maxBoundary, currentGuess);
+    }
+  }
+
+  return (
+    <View style={styles.screen}>
+      <View>
+        <Title>Opponent's Guess</Title>
+        <NumberContainer>{currentGuess}</NumberContainer>
+      </View>
+
+      <View>
+        <PrimaryButton>+</PrimaryButton>
+        <PrimaryButton>-</PrimaryButton>
+      </View>
+    </View>
+  );
 }
 
 export default GameScreen;
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    padding: 24,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#ddb52f",
+    textAlign: "center",
+    borderWidth: 2,
+    borderColor: "#ddb52f",
+  },
+});
