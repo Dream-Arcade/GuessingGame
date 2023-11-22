@@ -2,6 +2,7 @@ import { View, Text, Pressable, StyleSheet } from "react-native";
 import Colors from "../../assets/utils/colors";
 
 function PrimaryButton({ children, onPressed }) {
+  console.log("Pressed");
   return (
     <View style={styles.buttonOuterContainer}>
       <Pressable
